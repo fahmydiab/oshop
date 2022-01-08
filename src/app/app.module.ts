@@ -22,6 +22,11 @@ import { AuthService } from './auth.service';
 import { AuthGuard } from './auth-guard.service';
 import { UserService } from './user.service';
 import { AdminAuthGuard } from './admin-auth-guard.service';
+import { ProductFormComponent } from './admin/product-form/product-form.component';
+import { CategoryService } from './category.service';
+import { FormsModule } from '@angular/forms';
+import { ProductService } from './product.service';
+import { CustomFormsModule } from 'ng2-validation';
 
 @NgModule({
   declarations: [
@@ -33,9 +38,11 @@ import { AdminAuthGuard } from './admin-auth-guard.service';
     OrderSuccessComponent,
     MyOrdersComponent,
     AdminProductsComponent,
+    ProductFormComponent,
   ],
   imports: [
     BrowserModule,
+    FormsModule,
     RouterModule.forRoot([
       { path: '', component: HomeComponent },
       { path: 'products', component: ProductsComponent },
@@ -59,6 +66,16 @@ import { AdminAuthGuard } from './admin-auth-guard.service';
       },
 
       {
+        path: 'admin/products/new',
+        component: ProductFormComponent,
+        canActivate: [AuthGuard, AdminAuthGuard],
+      },
+      {
+        path: 'admin/products/:id',
+        component: ProductFormComponent,
+        canActivate: [AuthGuard, AdminAuthGuard],
+      },
+      {
         path: 'admin/products',
         component: AdminProductsComponent,
         canActivate: [AuthGuard, AdminAuthGuard],
@@ -72,9 +89,17 @@ import { AdminAuthGuard } from './admin-auth-guard.service';
     NgbModule,
     AngularFireAuthModule,
     AngularFireDatabaseModule,
+    CustomFormsModule,
     AngularFireModule.initializeApp(environment.firebase),
   ],
-  providers: [AuthService, AuthGuard, UserService, AdminAuthGuard],
+  providers: [
+    AuthService,
+    AuthGuard,
+    UserService,
+    AdminAuthGuard,
+    CategoryService,
+    ProductService
+  ],
   bootstrap: [AppComponent],
 })
 export class AppModule {}
