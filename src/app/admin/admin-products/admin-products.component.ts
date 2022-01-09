@@ -10,17 +10,26 @@ import { ProductService } from 'src/app/product.service';
 })
 export class AdminProductsComponent implements OnInit, OnDestroy {
   products: [string, Product][];
+  filteredProducts: [string, Product][];
   products$: Subscription;
 
   constructor(private productService: ProductService) {
     this.products$ = this.productService.getAll().subscribe((products) => {
-      console.log(Object.entries(products));
-      this.products = Object.entries(products);
+      this.filteredProducts = this.products = Object.entries(products);
     });
   }
 
   ngOnDestroy(): void {
     this.products$.unsubscribe();
+  }
+
+  filter(query: string) {
+    console.log(query)
+    this.filteredProducts = query
+      ? this.products.filter((p) =>
+          p[1].title.toLowerCase().includes(query.toLowerCase())
+        )
+      : this.products;
   }
 
   ngOnInit(): void {}
