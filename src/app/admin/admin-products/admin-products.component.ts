@@ -1,5 +1,5 @@
 import { Component, OnDestroy, OnInit } from '@angular/core';
-import { Subscription } from 'rxjs';
+import { Subject, Subscription } from 'rxjs';
 import { Product } from 'src/app/models/product';
 import { ProductService } from 'src/app/product.service';
 
@@ -12,25 +12,29 @@ export class AdminProductsComponent implements OnInit, OnDestroy {
   products: [string, Product][];
   filteredProducts: [string, Product][];
   products$: Subscription;
+  items: [string, Product][] = [];
+  itemCount: number;
+  dtOptions: DataTables.Settings = {};
+  dtTrigger: Subject<any> = new Subject<any>();
+
 
   constructor(private productService: ProductService) {
     this.products$ = this.productService.getAll().subscribe((products) => {
       this.filteredProducts = this.products = Object.entries(products);
+      this.dtTrigger.next();
     });
+  }
+
+  ngOnInit(): void {
+    this.dtOptions = {
+      pagingType: 'simple_numbers',
+      pageLength: 2
+    };
   }
 
   ngOnDestroy(): void {
     this.products$.unsubscribe();
-  }
+    this.dtTrigger.unsubscribe();
 
-  filter(query: string) {
-    console.log(query)
-    this.filteredProducts = query
-      ? this.products.filter((p) =>
-          p[1].title.toLowerCase().includes(query.toLowerCase())
-        )
-      : this.products;
   }
-
-  ngOnInit(): void {}
 }

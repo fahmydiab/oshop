@@ -1,16 +1,12 @@
 <p>
   <a routerLink="/admin/products/new" class="btn btn-primary"> New Product </a>
 </p>
-<p>
-  <input
-    type="text"
-    placeholder="Search..."
-    #query
-    (keyup)="filter(query.value)"
-    class="form-control"
-  />
-</p>
-<table class="table">
+<table
+  datatable
+  [dtOptions]="dtOptions"
+  [dtTrigger]="dtTrigger"
+  class="row-border hover table"
+>
   <thead>
     <tr>
       <th>Title</th>

@@ -83,7 +83,7 @@
     </form>
   </div>
   <div class="col-md-6">
-    <div class="card" style="width: 18rem">
+    <div *ngIf="product.title" class="card" style="width: 18rem">
       <img class="card-img-top" [src]="product.url" *ngIf="product.url" />
       <div class="card-body">
         <h5 class="card-title">{{ product.title }}</h5>
