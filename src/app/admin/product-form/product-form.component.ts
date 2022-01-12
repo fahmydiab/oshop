@@ -29,7 +29,7 @@ export class ProductFormComponent implements OnInit, OnDestroy {
     private productService: ProductService
   ) {
     this.categories$ = this.categoryService
-      .getCategories()
+      .getAll()
       .subscribe((categories) => {
         this.categories = Object.entries(categories);
       });

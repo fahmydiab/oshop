@@ -8,7 +8,7 @@ import { Observable, of } from 'rxjs';
 export class CategoryService {
   constructor(private db: AngularFireDatabase) {}
 
-  getCategories():Observable<any> {
+  getAll():Observable<any> {
     return this.db.object('/categories') !== null
       ? this.db.object('/categories').valueChanges()
       : of(null);
