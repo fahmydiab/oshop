@@ -11,6 +11,9 @@ export class ProductCardComponent {
   @Input('product')
   product:Product;
 
+  @Input('show-actions')
+  showActions = true;
+
   constructor() { }
 
 }
