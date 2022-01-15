@@ -9,7 +9,7 @@ import { ShoppingCartService } from '../shopping-cart.service';
 })
 export class ProductCardComponent {
   @Input('product')
-  product: [string, Product];
+  product: Product;
 
   @Input('show-actions')
   showActions = true;
@@ -29,7 +29,7 @@ export class ProductCardComponent {
 
   getQuantity() {
     if (!this.shoppingCart) return 0;
-    let item = this.shoppingCart.items[this.product[0]];
+    let item = this.shoppingCart.items[this.product.key];
     return item ? item.quantity : 0;
   }
 }

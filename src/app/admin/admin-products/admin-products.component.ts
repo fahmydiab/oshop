@@ -9,18 +9,17 @@ import { ProductService } from 'src/app/product.service';
   styleUrls: ['./admin-products.component.css'],
 })
 export class AdminProductsComponent implements OnInit, OnDestroy {
-  products: [string, Product][];
-  filteredProducts: [string, Product][];
+  products: Product[];
+  filteredProducts: Product[];
   products$: Subscription;
-  items: [string, Product][] = [];
+  items: Product[] = [];
   itemCount: number;
   dtOptions: DataTables.Settings = {};
   dtTrigger: Subject<any> = new Subject<any>();
 
-
   constructor(private productService: ProductService) {
     this.products$ = this.productService.getAll().subscribe((products) => {
-      this.filteredProducts = this.products = Object.entries(products);
+      this.filteredProducts = this.products = Product.parseProducts(products);
       this.dtTrigger.next();
     });
   }
@@ -28,13 +27,12 @@ export class AdminProductsComponent implements OnInit, OnDestroy {
   ngOnInit(): void {
     this.dtOptions = {
       pagingType: 'simple_numbers',
-      pageLength: 2
+      pageLength: 2,
     };
   }
 
   ngOnDestroy(): void {
     this.products$.unsubscribe();
     this.dtTrigger.unsubscribe();
-
   }
 }

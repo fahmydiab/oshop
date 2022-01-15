@@ -14,8 +14,8 @@ import { ShoppingCartService } from '../shopping-cart.service';
 export class ProductsComponent implements OnDestroy, OnInit {
   products$: Subscription;
   cartSubscription$: Subscription;
-  products: [string, Product][] = [];
-  filteredProducts: [string, Product][] = [];
+  products: Product[] = [];
+  filteredProducts: Product[] = [];
   category: any;
   cart: any;
 
@@ -28,7 +28,7 @@ export class ProductsComponent implements OnDestroy, OnInit {
       .getAll()
       .pipe(
         switchMap((products) => {
-          this.products = Object.entries<Product>(products);
+          this.products = Product.parseProducts(products);
           return route.queryParamMap;
         })
       )
@@ -36,7 +36,7 @@ export class ProductsComponent implements OnDestroy, OnInit {
         this.category = params.get('category');
 
         this.filteredProducts = this.category
-          ? this.products.filter((p) => p[1].category === this.category)
+          ? this.products.filter((p) => p.details.category === this.category)
           : this.products;
       });
   }

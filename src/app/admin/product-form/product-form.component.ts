@@ -14,13 +14,8 @@ import { take } from 'rxjs/operators';
 export class ProductFormComponent implements OnInit, OnDestroy {
   categories: [string, { name: string }][];
   categories$: Subscription;
-  product: Product={
-    category: '',
-    price: 0,
-    title: '',
-    url: ''
-  };
-  id:any;
+  product: Product = new Product();
+  id: any;
 
   constructor(
     private router: Router,
@@ -28,11 +23,9 @@ export class ProductFormComponent implements OnInit, OnDestroy {
     private categoryService: CategoryService,
     private productService: ProductService
   ) {
-    this.categories$ = this.categoryService
-      .getAll()
-      .subscribe((categories) => {
-        this.categories = Object.entries(categories);
-      });
+    this.categories$ = this.categoryService.getAll().subscribe((categories) => {
+      this.categories = Object.entries(categories);
+    });
 
     this.id = this.route.snapshot.paramMap.get('id');
     if (this.id)
@@ -47,12 +40,12 @@ export class ProductFormComponent implements OnInit, OnDestroy {
   }
 
   save(product: any) {
-    if(this.id) this.productService.update(this.id,product);
+    if (this.id) this.productService.update(this.id, product);
     else this.productService.create(product);
 
     this.router.navigate(['/admin/products']);
   }
-  delete(){
+  delete() {
     if (!confirm('Are you sure you want to delete this product?')) return;
 
     this.productService.delete(this.id);

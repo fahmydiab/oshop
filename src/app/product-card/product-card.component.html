@@ -1,14 +1,14 @@
-<div *ngIf="product[1].title" class="card">
+<div *ngIf="product.details.title" class="card">
   <img
-    *ngIf="product[1].url"
+    *ngIf="product.details.url"
     class="card-img-top"
-    src="{{ product[1].url }}"
-    alt="{{ product[1].title }}"
+    src="{{ product.details.url }}"
+    alt="{{ product.details.title }}"
   />
   <div class="card-body">
-    <h5 class="card-title">{{ product[1].title }}</h5>
+    <h5 class="card-title">{{ product.details.title }}</h5>
     <p class="card-text">
-      {{ product[1].price | currency: "EGP":"code" }}
+      {{ product.details.price | currency: "EGP":"code" }}
     </p>
     <div *ngIf="showActions" class="card-footer">
       <button

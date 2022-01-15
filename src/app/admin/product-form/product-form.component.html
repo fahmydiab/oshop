@@ -5,7 +5,7 @@
         <label for="title">Title</label>
         <input
           #title="ngModel"
-          [(ngModel)]="product.title"
+          [(ngModel)]="product.details.title"
           name="title"
           id="title"
           type="text"
@@ -25,7 +25,7 @@
           </div>
           <input
             #price="ngModel"
-            [(ngModel)]="product.price"
+            [(ngModel)]="product.details.price"
             name="price"
             id="price"
             type="number"
@@ -43,7 +43,7 @@
         <label for="category">Category</label>
         <select
           #category="ngModel"
-          [(ngModel)]="product.category"
+          [(ngModel)]="product.details.category"
           name="category"
           id="category"
           class="form-control"
@@ -65,7 +65,7 @@
         <label for="imageUrl">Image URL</label>
         <input
           #url="ngModel"
-          [(ngModel)]="product.url"
+          [(ngModel)]="product.details.url"
           name="url"
           id="imageUrl"
           type="text"
@@ -86,7 +86,7 @@
   </div>
   <div class="col-md-6">
     <product-card
-      [product]="[id, product]"
+      [product]="product"
       [show-actions]="false"
     ></product-card>
   </div>
