@@ -1,7 +1,12 @@
 import { Injectable } from '@angular/core';
-import { AngularFireDatabase } from '@angular/fire/compat/database';
+import {
+  AngularFireDatabase,
+  AngularFireObject,
+} from '@angular/fire/compat/database';
 import { take } from 'rxjs/operators';
 import { Product } from './models/product';
+import { ShoppingCart } from './models/shopping-cart';
+import { ShoppingCartItem } from './models/shopping-cart-item';
 
 @Injectable({
   providedIn: 'root',
@@ -24,35 +29,17 @@ export class ShoppingCartService {
     return result.key;
   }
 
-  async getCart() {
+  async getCart(): Promise<AngularFireObject<ShoppingCart>> {
     let cartId = await this.getOrCreateCartId();
 
     return this.db.object('/shopping-carts/' + cartId);
   }
 
   async addToCart(product: [string, Product]) {
-    // let cartId = await this.getOrCreateCartId();
-    // let item$$ = this.getItem(cartId, product[0]);
-    // let item$ = item$$.valueChanges();
-
-    // item$.pipe(take(1)).subscribe((item) => {
-    //   if (item !== null)
-    //     item$$.update({ product: product[1], quantity: item.quantity + 1 });
-    //   else item$$.update({ product: product[1], quantity: 1 });
-    // });
     this.updateItemQuantity(product, 1);
   }
 
   async removeFromCart(product: [string, Product]) {
-    // let cartId = await this.getOrCreateCartId();
-    // let item$$ = this.getItem(cartId, product[0]);
-    // let item$ = item$$.valueChanges();
-
-    // item$.pipe(take(1)).subscribe((item) => {
-    //   if (item !== null)
-    //     item$$.update({ product: product[1], quantity: item.quantity - 1 });
-    //   else item$$.update({ product: product[1], quantity: 0 });
-    // });
     this.updateItemQuantity(product, -1);
   }
 
@@ -64,13 +51,13 @@ export class ShoppingCartService {
     item$.pipe(take(1)).subscribe((item) =>
       item$$.update({
         product: product[1],
-        quantity: (item.quantity || 0) + change,
+        quantity: item ? item.quantity + change : change,
       })
     );
   }
 
   private getItem(cartId: any, productId: string) {
-    return this.db.object<any>(
+    return this.db.object<ShoppingCartItem>(
       '/shopping-carts/' + cartId + '/items/' + productId
     );
   }
