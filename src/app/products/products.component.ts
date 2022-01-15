@@ -4,19 +4,26 @@ import { Subscription } from 'rxjs';
 import { switchMap } from 'rxjs/operators';
 import { Product } from '../models/product';
 import { ProductService } from '../product.service';
+import { ShoppingCartService } from '../shopping-cart.service';
 
 @Component({
   selector: 'app-products',
   templateUrl: './products.component.html',
   styleUrls: ['./products.component.css'],
 })
-export class ProductsComponent implements OnDestroy {
+export class ProductsComponent implements OnDestroy, OnInit {
   products$: Subscription;
+  cartSubscription$: Subscription;
   products: [string, Product][] = [];
   filteredProducts: [string, Product][] = [];
   category: any;
+  cart: any;
 
-  constructor(route: ActivatedRoute, productService: ProductService) {
+  constructor(
+    route: ActivatedRoute,
+    productService: ProductService,
+    private shoppingCartService: ShoppingCartService
+  ) {
     this.products$ = productService
       .getAll()
       .pipe(
@@ -34,7 +41,14 @@ export class ProductsComponent implements OnDestroy {
       });
   }
 
-  ngOnDestroy(): void {
+  async ngOnInit() {
+    this.cartSubscription$ = (await this.shoppingCartService.getCart())
+      .valueChanges()
+      .subscribe((cart) => (this.cart = cart));
+  }
+
+  ngOnDestroy() {
     this.products$.unsubscribe();
+    this.cartSubscription$.unsubscribe();
   }
 }

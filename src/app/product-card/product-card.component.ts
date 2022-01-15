@@ -14,9 +14,22 @@ export class ProductCardComponent {
   @Input('show-actions')
   showActions = true;
 
+  @Input('shopping-cart')
+  shoppingCart: any;
+
   constructor(private cartservice: ShoppingCartService) {}
 
-  addToCart(product: [string,Product]) {
-    this.cartservice.addToCart(product);
+  addToCart() {
+    this.cartservice.addToCart(this.product);
+  }
+
+  removeFromCart() {
+    this.cartservice.removeFromCart(this.product);
+  }
+
+  getQuantity() {
+    if (!this.shoppingCart) return 0;
+    let item = this.shoppingCart.items[this.product[0]];
+    return item ? item.quantity : 0;
   }
 }
