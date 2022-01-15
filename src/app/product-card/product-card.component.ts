@@ -1,19 +1,22 @@
 import { Component, Input, OnInit } from '@angular/core';
 import { Product } from '../models/product';
+import { ShoppingCartService } from '../shopping-cart.service';
 
 @Component({
   selector: 'product-card',
   templateUrl: './product-card.component.html',
-  styleUrls: ['./product-card.component.css']
+  styleUrls: ['./product-card.component.css'],
 })
 export class ProductCardComponent {
-
   @Input('product')
-  product:Product;
+  product: [string, Product];
 
   @Input('show-actions')
   showActions = true;
 
-  constructor() { }
+  constructor(private cartservice: ShoppingCartService) {}
 
+  addToCart(product: [string,Product]) {
+    this.cartservice.addToCart(product);
+  }
 }

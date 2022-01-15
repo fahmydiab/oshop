@@ -30,6 +30,7 @@ import { CustomFormsModule } from 'ng2-validation';
 import { DataTablesModule } from 'angular-datatables';
 import { ProductFilterComponent } from './products/product-filter/product-filter.component';
 import { ProductCardComponent } from './product-card/product-card.component';
+import { ShoppingCartService } from './shopping-cart.service';
 @NgModule({
   declarations: [
     AppComponent,
@@ -104,7 +105,8 @@ import { ProductCardComponent } from './product-card/product-card.component';
     UserService,
     AdminAuthGuard,
     CategoryService,
-    ProductService
+    ProductService,
+    ShoppingCartService
   ],
   bootstrap: [AppComponent],
 })

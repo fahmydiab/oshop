@@ -1,19 +1,23 @@
-<div *ngIf="product.title" class="card">
+<div *ngIf="product[1].title" class="card">
   <img
-    *ngIf="product.url"
+    *ngIf="product[1].url"
     class="card-img-top"
-    src="{{ product.url }}"
-    alt="{{ product.title }}"
+    src="{{ product[1].url }}"
+    alt="{{ product[1].title }}"
   />
   <div class="card-body">
-    <h5 class="card-title">{{ product.title }}</h5>
+    <h5 class="card-title">{{ product[1].title }}</h5>
     <p class="card-text">
-      {{ product.price | currency: "EGP":"code" }}
+      {{ product[1].price | currency: "EGP":"code" }}
     </p>
     <div class="card-footer">
-      <a *ngIf="showActions" href="#" class="btn btn-primary btn-block"
-        >Add to Cart</a
+      <button
+        *ngIf="showActions"
+        (click)="addToCart(product)"
+        class="btn btn-primary btn-block"
       >
+        Add to Cart
+      </button>
     </div>
   </div>
 </div>
