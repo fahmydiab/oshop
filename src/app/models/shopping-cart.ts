@@ -7,7 +7,6 @@ export class ShoppingCart {
   constructor(
     public itemList: [ productId: string, item: ShoppingCartItem ][]
   ) {
-    debugger
     itemList.forEach((i) =>
       this.items.push(
         new ShoppingCartItem(i[0], i[1].product, i[1].quantity)

@@ -12,7 +12,12 @@
     <tbody>
       <tr *ngFor="let productId of cart.productIds">
         <td>{{ cart.getItem(productId).product.title }}</td>
-        <td>{{ cart.getItem(productId).quantity }}</td>
+        <td>
+          <product-quantity
+          [product]="{key:cart.getItem(productId).key,details:cart.getItem(productId).product}"
+          [shopping-cart]="cart">
+        </product-quantity>
+        </td>
         <td>
           {{ cart.getItem(productId).totalPrice | currency: "EGP":"code" }}
         </td>

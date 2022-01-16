@@ -57,10 +57,14 @@ export class ShoppingCartService {
     let item$ = item$$.valueChanges();
 
     item$.pipe(take(1)).subscribe((item) =>
-      item$$.update({
+    {
+      if(item!.quantity+change === 0) this.removeItem(cartId,product.key);
+      else { item$$.update({
         product: product.details,
         quantity: item ? item.quantity + change : change,
       })
+    }
+  }
     );
   }
 
@@ -68,5 +72,11 @@ export class ShoppingCartService {
     return this.db.object<ShoppingCartItem>(
       '/shopping-carts/' + cartId + '/items/' + productId
     );
+  }
+
+  private removeItem(cartId: any, productId: string) {
+    return this.db.object<ShoppingCartItem>(
+      '/shopping-carts/' + cartId + '/items/' + productId
+    ).remove();
   }
 }
