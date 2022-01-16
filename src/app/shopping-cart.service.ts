@@ -34,11 +34,11 @@ export class ShoppingCartService {
     let cartId = await this.getOrCreateCartId();
 
     return this.db
-      .object<ShoppingCart>('/shopping-carts/' + cartId)
+      .object<any>('/shopping-carts/' + cartId)
       .valueChanges()
       .pipe(
         map((x) => {
-          return new ShoppingCart(x!.items);
+          return new ShoppingCart(Object.entries(x.items));
         })
       );
   }
