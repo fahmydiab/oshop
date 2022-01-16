@@ -38,6 +38,7 @@ export class ShoppingCartService {
       .valueChanges()
       .pipe(
         map((x) => {
+          if (!x.items) return new ShoppingCart([]);
           return new ShoppingCart(Object.entries(x.items));
         })
       );
@@ -53,30 +54,32 @@ export class ShoppingCartService {
 
   private async updateItemQuantity(product: Product, change: number) {
     let cartId = await this.getOrCreateCartId();
-    let item$$ = this.getItem(cartId, product.key);
+    let item$$ = this.getItem(cartId, product);
     let item$ = item$$.valueChanges();
-
-    item$.pipe(take(1)).subscribe((item) =>
-    {
-      if(item!.quantity+change === 0) this.removeItem(cartId,product.key);
-      else { item$$.update({
-        product: product.details,
-        quantity: item ? item.quantity + change : change,
-      })
-    }
+    item$.pipe(take(1)).subscribe((item) => {
+      if (item && item!.quantity + change === 0)
+        this.removeItem(cartId, product.key);
+      else {
+        item$$.update({
+          product: product.details,
+          quantity: item ? item.quantity + change : change,
+        });
+      }
+    });
   }
-    );
-  }
 
-  private getItem(cartId: any, productId: string) {
-    return this.db.object<ShoppingCartItem>(
-      '/shopping-carts/' + cartId + '/items/' + productId
+  private getItem(cartId: any, product: Product) {
+    let item = this.db.object<ShoppingCartItem>(
+      '/shopping-carts/' + cartId + '/items/' + product.key
     );
+    return item;
   }
 
   private removeItem(cartId: any, productId: string) {
-    return this.db.object<ShoppingCartItem>(
-      '/shopping-carts/' + cartId + '/items/' + productId
-    ).remove();
+    return this.db
+      .object<ShoppingCartItem>(
+        '/shopping-carts/' + cartId + '/items/' + productId
+      )
+      .remove();
   }
 }
