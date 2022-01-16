@@ -1,6 +1,8 @@
 import { ProductDetails } from './product';
+export class ShoppingCartItem {
+  constructor(public product: ProductDetails, public quantity: number) {}
 
-export interface ShoppingCartItem {
-  quantity: number;
-  product: ProductDetails;
+  get totalPrice() {
+    return this.product.price * this.quantity;
+  }
 }

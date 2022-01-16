@@ -6,15 +6,24 @@
       <tr>
         <th>Product</th>
         <th>Quantity</th>
-        <th></th>
+        <th>Price</th>
       </tr>
     </thead>
     <tbody>
       <tr *ngFor="let productId of cart.productIds">
         <td>{{ cart.getItem(productId).product.title }}</td>
         <td>{{ cart.getItem(productId).quantity }}</td>
-        <td></td>
+        <td>
+          {{ cart.getItem(productId).totalPrice | currency: "EGP":"code" }}
+        </td>
       </tr>
     </tbody>
+    <tfoot>
+      <tr>
+        <th></th>
+        <th></th>
+        <th>{{ cart.totalPrice | currency: "EGP":"code" }}</th>
+      </tr>
+    </tfoot>
   </table>
 </ng-container>
