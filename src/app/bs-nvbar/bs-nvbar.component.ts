@@ -1,6 +1,9 @@
 import { Component, OnInit } from '@angular/core';
+import { AngularFireObject } from '@angular/fire/compat/database';
+import { Observable, of } from 'rxjs';
 import { AuthService } from '../auth.service';
 import { AppUser } from '../models/app-user';
+import { ShoppingCart } from '../models/shopping-cart';
 import { ShoppingCartService } from '../shopping-cart.service';
 
 @Component({
@@ -10,21 +13,18 @@ import { ShoppingCartService } from '../shopping-cart.service';
 })
 export class BsNvbarComponent implements OnInit {
   appUser: AppUser;
-  shoppingCartItemCount: number;
+  cart$: Observable<ShoppingCart>;
+  cart$$: ShoppingCart;
 
   constructor(
     private auth: AuthService,
     private shoppingCartService: ShoppingCartService
   ) {}
+
   async ngOnInit() {
     this.auth.appUser$.subscribe((appUser) => (this.appUser = appUser!));
-    let cart$ = await this.shoppingCartService.getCart();
-    cart$.valueChanges().subscribe(cart => {
-      this.shoppingCartItemCount = 0;
-      if(!cart) return;
-      for(let productId in cart?.items)
-        this.shoppingCartItemCount += cart?.items[productId].quantity;
-    })
+    this.cart$ = await this.shoppingCartService.getCart();
+    this.cart$.subscribe((cart) => (this.cart$$ = cart));
   }
 
   logout() {
