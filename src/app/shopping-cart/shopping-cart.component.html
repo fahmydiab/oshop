@@ -1,24 +1,37 @@
-<ng-container *ngIf="cart$ | async as cart">
-  <h1>Shopping Cart</h1>
+<h1>Shopping Cart</h1>
+<div class="row col-10" *ngIf="cart$ | async as cart">
   <p>You have {{ cart.totalItemsCount }} items in your shopping cart.</p>
   <table class="table">
     <thead>
       <tr>
+        <th></th>
         <th>Product</th>
-        <th>Quantity</th>
-        <th>Price</th>
+        <th class="text-center" style="width: 230px">Quantity</th>
+        <th class="text-right" style="width: 200px">Price</th>
       </tr>
     </thead>
     <tbody>
       <tr *ngFor="let productId of cart.productIds">
+        <td>
+          <div
+            [style.backgroundImage]="
+              'url(' + cart.getItem(productId).product.url + ')'
+            "
+            class="thumbnail"
+          ></div>
+        </td>
         <td>{{ cart.getItem(productId).product.title }}</td>
         <td>
           <product-quantity
-          [product]="{key:cart.getItem(productId).key,details:cart.getItem(productId).product}"
-          [shopping-cart]="cart">
-        </product-quantity>
+            [product]="{
+              key: cart.getItem(productId).key,
+              details: cart.getItem(productId).product
+            }"
+            [shopping-cart]="cart"
+          >
+          </product-quantity>
         </td>
-        <td>
+        <td class="text-right">
           {{ cart.getItem(productId).totalPrice | currency: "EGP":"code" }}
         </td>
       </tr>
@@ -27,8 +40,14 @@
       <tr>
         <th></th>
         <th></th>
-        <th>{{ cart.totalPrice | currency: "EGP":"code" }}</th>
+        <th></th>
+        <th class="text-right">
+          {{ cart.totalPrice | currency: "EGP":"code" }}
+        </th>
       </tr>
     </tfoot>
   </table>
-</ng-container>
+  <button (click)="clearCart()" class="btn btn-danger btn-sm">
+    Clear Shopping Cart
+  </button>
+</div>

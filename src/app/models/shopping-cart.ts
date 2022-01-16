@@ -5,7 +5,7 @@ export class ShoppingCart {
   items: ShoppingCartItem[]=[];
 
   constructor(
-    public itemList: [ productId: string, item: ShoppingCartItem ][]
+    private itemList: [ productId: string, item: ShoppingCartItem ][]
   ) {
     itemList.forEach((i) =>
       this.items.push(

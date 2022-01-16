@@ -15,21 +15,6 @@ import { ShoppingCartItem } from './models/shopping-cart-item';
 export class ShoppingCartService {
   constructor(private db: AngularFireDatabase) {}
 
-  private create(): any {
-    return this.db.list('/shopping-carts/').push({
-      dateCraeted: new Date().getTime(),
-    });
-  }
-
-  private async getOrCreateCartId(): Promise<string> {
-    let cartId = localStorage.getItem('cartId');
-    if (cartId) return cartId;
-
-    let result = await this.create();
-    localStorage.setItem('cartId', result.key);
-    return result.key;
-  }
-
   async getCart(): Promise<Observable<ShoppingCart>> {
     let cartId = await this.getOrCreateCartId();
 
@@ -52,13 +37,32 @@ export class ShoppingCartService {
     this.updateItemQuantity(product, -1);
   }
 
+  private create(): any {
+    return this.db.list('/shopping-carts/').push({
+      dateCraeted: new Date().getTime(),
+    });
+  }
+
+  private async getOrCreateCartId(): Promise<string> {
+    let cartId = localStorage.getItem('cartId');
+    if (cartId) return cartId;
+
+    let result = await this.create();
+    localStorage.setItem('cartId', result.key);
+    return result.key;
+  }
+
+  async clearCart() {
+    let cartId = await this.getOrCreateCartId();
+    this.db.object('/shopping-carts/' + cartId + '/items').remove();
+  }
+
   private async updateItemQuantity(product: Product, change: number) {
     let cartId = await this.getOrCreateCartId();
     let item$$ = this.getItem(cartId, product);
     let item$ = item$$.valueChanges();
     item$.pipe(take(1)).subscribe((item) => {
-      if (item && item!.quantity + change === 0)
-        this.removeItem(cartId, product.key);
+      if (item && item!.quantity + change === 0) item$$.remove();
       else {
         item$$.update({
           product: product.details,
@@ -73,13 +77,5 @@ export class ShoppingCartService {
       '/shopping-carts/' + cartId + '/items/' + product.key
     );
     return item;
-  }
-
-  private removeItem(cartId: any, productId: string) {
-    return this.db
-      .object<ShoppingCartItem>(
-        '/shopping-carts/' + cartId + '/items/' + productId
-      )
-      .remove();
   }
 }
