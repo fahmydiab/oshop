@@ -34,10 +34,10 @@ export class AuthService {
 
   get appUser$() {
     return this.user$.pipe(
-      switchMap(user => {
-        if(user) return this.userService.get(user.uid)
+      switchMap((user) => {
+        if (user) return this.userService.get(user.uid);
         return of(null);
-      }))
-
+      })
+    );
   }
 }

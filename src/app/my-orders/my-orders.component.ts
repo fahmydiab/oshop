@@ -1,5 +1,5 @@
 import { Component, OnInit } from '@angular/core';
-import { Observable } from 'rxjs';
+import { Observable, of, pipe } from 'rxjs';
 import { switchMap } from 'rxjs/operators';
 import { AuthService } from '../auth.service';
 import { Order } from '../models/order';
@@ -10,16 +10,18 @@ import { OrderService } from '../order.service';
   templateUrl: './my-orders.component.html',
   styleUrls: ['./my-orders.component.css'],
 })
-export class MyOrdersComponent implements OnInit {
+export class MyOrdersComponent {
   orders$: Observable<Order[]>;
 
   constructor(
     private orderService: OrderService,
     private authService: AuthService
-  ) {}
-  ngOnInit(): void {
+  ) {
     this.orders$ = this.authService.user$.pipe(
-      switchMap((u) => this.orderService.getOrderByUser(u.id).valueChanges())
+      switchMap((u) => {
+        if (u) return this.orderService.getOrderByUser(u.uid).valueChanges();
+        return of([]);
+      })
     );
   }
 }
