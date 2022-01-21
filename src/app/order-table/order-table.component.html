@@ -11,7 +11,13 @@
       <td>{{ order.shipping.name }}</td>
       <td>{{ order.datePlaced | date: "mediumDate" }}</td>
       <td>
-        <a href="">View</a>
+        <button
+          class="btn btn-primary btn-sm"
+          mat-button
+          (click)="viewDetails(order)"
+        >
+          View
+        </button>
       </td>
     </tr>
   </tbody>

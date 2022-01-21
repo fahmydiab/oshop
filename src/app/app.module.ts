@@ -36,6 +36,10 @@ import { OrderService } from './order.service';
 import { ShoppingCartSummaryComponent } from './shopping-cart-summary/shopping-cart-summary.component';
 import { ShippingFormComponent } from './shipping-form/shipping-form.component';
 import { OrderTableComponent } from './order-table/order-table.component';
+import { OrderSummaryComponent } from './order-summary/order-summary.component';
+import { NoopAnimationsModule } from '@angular/platform-browser/animations';
+import { MatDialogModule } from '@angular/material/dialog';
+
 @NgModule({
   declarations: [
     AppComponent,
@@ -54,7 +58,8 @@ import { OrderTableComponent } from './order-table/order-table.component';
     ShoppingCartSummaryComponent,
     ShippingFormComponent,
     AdminOrdersComponent,
-    OrderTableComponent
+    OrderTableComponent,
+    OrderSummaryComponent,
   ],
   imports: [
     BrowserModule,
@@ -108,6 +113,8 @@ import { OrderTableComponent } from './order-table/order-table.component';
     AngularFireDatabaseModule,
     CustomFormsModule,
     AngularFireModule.initializeApp(environment.firebase),
+    NoopAnimationsModule,
+    MatDialogModule,
   ],
   providers: [
     AuthService,
